@@ -99,9 +99,9 @@ with engine.begin() as conn:
     conn.execute(text(create_table_query))
 
 # Append data to the existing table, do not replace
-#df.to_sql("activities", engine, if_exists="append", index=False)
+df.to_sql("activities", engine, if_exists="append", index=False)
 # Overwrite the table if it already exists
-df.to_sql("activities", engine, if_exists="replace", index=False)
+#df.to_sql("activities", engine, if_exists="replace", index=False)
 
 print("Data loaded successfully into PostgreSQL database.")
 
