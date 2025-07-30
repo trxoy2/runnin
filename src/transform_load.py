@@ -104,3 +104,10 @@ with engine.begin() as conn:
 df.to_sql("activities", engine, if_exists="replace", index=False)
 
 print("Data loaded successfully into PostgreSQL database.")
+
+# select all data to verify
+with engine.connect() as conn:
+    result = conn.execute(text("SELECT * FROM activities LIMIT 10;"))
+    for row in result:
+        print(row)
+    conn.close()    
