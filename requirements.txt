@@ -4,3 +4,4 @@ pandas
 docker
 python-dotenv
 datetime
+psycopg2-binary
