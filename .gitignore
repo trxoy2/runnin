@@ -5,6 +5,7 @@ runnin_venv/
 data/*
 logs/*
 !data/.gitkeep
+!data/activities.json
 !logs/.gitkeep
 
 last_run.txt
