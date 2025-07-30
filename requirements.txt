@@ -4,4 +4,3 @@ pandas
 docker
 python-dotenv
 datetime
-sqlite3
