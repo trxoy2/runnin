@@ -100,9 +100,9 @@ else:
     with engine.begin() as conn:
         conn.execute(text(create_table_query))
 
-    df.to_sql("activities", engine, if_exists="replace", index=False)
+    #df.to_sql("activities", engine, if_exists="replace", index=False)
     #append
-    #df.to_sql("activities", engine, if_exists="append", index=False)
+    df.to_sql("activities", engine, if_exists="append", index=False)
     logging.info("Data loaded successfully into PostgreSQL database.")
 
     with engine.connect() as conn:
