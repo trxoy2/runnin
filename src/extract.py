@@ -39,8 +39,8 @@ def fetch_activity_data():
     }
 
     after_timestamp = get_last_run_timestamp()
-    after_timestamp = log_human_readable_time(after_timestamp)
-    logging.info(f"Fetching activities after: {after_timestamp}")
+    formatted_tm = log_human_readable_time(after_timestamp)
+    logging.info(f"Fetching activities after: {formatted_tm}")
     # hardcode temporary after timestamp for bulk upload
     #after_timestamp = 1735689600 
     params = {
