@@ -1,0 +1,7 @@
+requests
+SQLAlchemy
+pandas
+docker
+python-dotenv
+logging
+datetime
