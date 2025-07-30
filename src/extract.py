@@ -6,7 +6,8 @@ import os
 from utils.logsetup import setup_logger
 from utils.auth import refresh_access_token
 
-LAST_RUN_FILE = "last_run.txt"
+LAST_RUN_FILE = "data/last_run.txt"
+
 setup_logger()
 
 def log_human_readable_time(ts):

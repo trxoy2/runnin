@@ -2,7 +2,8 @@ import os
 import json
 import pandas as pd
 from sqlalchemy import create_engine, text
-
+from utils.logsetup import setup_logger
+setup_logger()
 #-----------------------------------------------------
 #--------- Read JSON data and transform----------------
 #-----------------------------------------------------
