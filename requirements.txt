@@ -5,3 +5,5 @@ docker
 python-dotenv
 logging
 datetime
+json
+sqlite3
