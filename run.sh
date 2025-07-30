@@ -4,7 +4,7 @@ set -e
 # Run the Python script
 python src/extract.py
 # Run the next step in the pipeline
-python src/transform.py
+python src/transform_load.py
 # Print a success message
 echo "Pipeline completed successfully."
 
