@@ -4,6 +4,9 @@ runnin_venv/
 
 data/*
 logs/*
+!data/.keep
+!logs/.keep
+
 last_run.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
