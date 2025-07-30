@@ -11,8 +11,6 @@ import pandas as pd
 with open("data/activities.json", "r") as f:
     activities = json.load(f)
 
-print(activities)
-
 # read json into pandas dataframe
 df = pd.DataFrame(activities)
 #handle athlete object {'id': 163373391, 'resource_state': 1}
