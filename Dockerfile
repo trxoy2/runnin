@@ -4,6 +4,9 @@ FROM python:3.9-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
+# create the last_run.txt file if it doesn't exist
+RUN mkdir -p /app/data && touch /app/data/last_run.txt
+
 # Set the working directory
 WORKDIR /app
 
