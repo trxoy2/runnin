@@ -42,7 +42,7 @@ def fetch_activity_data():
     formatted_tm = log_human_readable_time(after_timestamp)
     logging.info(f"Fetching activities after: {formatted_tm}")
     # hardcode temporary after timestamp for bulk upload
-    #after_timestamp = 1735689600 
+    after_timestamp = 1735689600 
     params = {
         "after": after_timestamp,
         "per_page": 100
