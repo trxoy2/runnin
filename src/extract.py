@@ -7,7 +7,6 @@ from utils.logsetup import setup_logger
 from utils.auth import refresh_access_token
 
 LAST_RUN_FILE = "data/last_run.txt"
-
 setup_logger()
 
 def log_human_readable_time(ts):
@@ -18,18 +17,13 @@ def log_human_readable_time(ts):
 def get_last_run_timestamp():
     if os.path.exists(LAST_RUN_FILE):
         with open(LAST_RUN_FILE, "r") as f:
-            content = f.read().strip()
-            try:
-                ts = int(content)
-                log_human_readable_time(ts)
-                return ts
-            except ValueError as e:
-                logging.error(f"Error reading last run timestamp from file '{LAST_RUN_FILE}': {e}")
-
-    # Default: start of current day UTC
+            ts = int(f.read().strip())
+            log_human_readable_time(ts)
+            return ts
+    # Default: start of today UTC
     now = datetime.now(timezone.utc)
-    start_of_today = datetime.combine(now.date(), time.min, tzinfo=timezone.utc)
-    ts = int(start_of_today.timestamp())
+    start_of_day = datetime.combine(now.date(), time.min, tzinfo=timezone.utc)
+    ts = int(start_of_day.timestamp())
     log_human_readable_time(ts)
     return ts
 
@@ -48,7 +42,7 @@ def fetch_activity_data():
     after_timestamp = log_human_readable_time(after_timestamp)
     logging.info(f"Fetching activities after: {after_timestamp}")
     # hardcode temporary after timestamp for bulk upload
-    #after_timestamp = 1735689600 
+    after_timestamp = 1735689600 
     params = {
         "after": after_timestamp,
         "per_page": 100
