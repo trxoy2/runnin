@@ -4,8 +4,8 @@ runnin_venv/
 
 data/*
 logs/*
-!data/.keep
-!logs/.keep
+!data/.gitkeep
+!logs/.gitkeep
 
 last_run.txt
 # Byte-compiled / optimized / DLL files
