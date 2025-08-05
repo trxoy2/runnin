@@ -50,7 +50,7 @@ def fetch_activity_data(user_key, access_token):
     logging.info(f"{user_key}: Fetching activities after {log_time(after_timestamp)}")
 
     # Uncomment or remove hardcoded after_timestamp for bulk overwrite
-    after_timestamp = 1735689600 
+    #after_timestamp = 1735689600 
 
     params = {"after": after_timestamp, "per_page": 100}
     response = requests.get(url, headers=headers, params=params)

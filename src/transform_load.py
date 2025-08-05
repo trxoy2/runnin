@@ -177,12 +177,12 @@ else:
         conn.execute(text(create_table_query))
 
     #overwrite
-    df.to_sql("activities", engine, if_exists="replace", index=False)
+    #df.to_sql("activities", engine, if_exists="replace", index=False)
     #append
-    #df.to_sql("activities", engine, if_exists="append", index=False)
-    logging.info("Data loaded successfully into PostgreSQL database.")
+    df.to_sql("activities", engine, if_exists="append", index=False)
+    logging.info("Activities loaded successfully into PostgreSQL database.")
 
-    with engine.connect() as conn:
-        result = conn.execute(text("SELECT * FROM activities LIMIT 10;"))
-        for row in result:
-            print(row)
+    #with engine.connect() as conn:
+    #    result = conn.execute(text("SELECT * FROM activities LIMIT 10;"))
+    #    for row in result:
+    #        print(row)
