@@ -5,14 +5,51 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from utils.logsetup import setup_logger
 setup_logger()
-#-----------------------------------------------------
-#--------- Read JSON data and transform----------------
-#-----------------------------------------------------
 
-with open("data/activities.json", "r") as f:
-    activities = json.load(f)
+#---------------------------------------------------------------------
+#--------- Read JSON data and transform for athlete profiles----------
+#---------------------------------------------------------------------
+users = ["TROY", "SAM"]
+user_profiles_map = {}
 
-df = pd.DataFrame(activities)
+for user in users:
+    try:
+        with open(f"data/athlete_profile_{user}.json") as f:
+            profile = json.load(f)
+            if not isinstance(profile, dict):
+                profile = {}
+    except (FileNotFoundError, json.JSONDecodeError):
+        profile = {}
+    user_profiles_map[user] = profile
+
+# Combine all profiles into a list (skip empty dicts)
+all_profiles = [p for p in user_profiles_map.values() if p]
+
+# Create one DataFrame from all profiles
+df_profiles = pd.DataFrame(all_profiles)
+#---------------------------------------------------------------------
+#--------- Read JSON data and transform for activities----------------
+#---------------------------------------------------------------------
+users = ["TROY", "SAM"]
+user_activities_map = {}
+
+for user in users:
+    try:
+        with open(f"data/activities_{user}.json") as f:
+            activities = json.load(f)
+            if not isinstance(activities, list):
+                activities = []
+    except (FileNotFoundError, json.JSONDecodeError):
+        activities = []
+    user_activities_map[user] = activities
+
+# Flatten all user activities into a single list
+all_activities = []
+for activities in user_activities_map.values():
+    all_activities.extend(activities)
+
+# Create one DataFrame from all combined activities
+df = pd.DataFrame(all_activities)
 
 if df.empty:
     logging.info("No new activities found. Skipping transformation and database load.")
@@ -35,6 +72,12 @@ else:
     df['start_date'] = pd.to_datetime(df['start_date'], utc=True)
     df['start_date_local'] = pd.to_datetime(df['start_date_local'], utc=True)
 
+
+
+#---------------------------------------------------------------------
+#--------- Load athlete profiles into database-----------------------
+#---------------------------------------------------------------------
+
     # Database setup and loading
     db_host = os.getenv("POSTGRES_HOST", "db")
     db_user = os.getenv("POSTGRES_USER")
@@ -45,6 +88,40 @@ else:
     connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
     engine = create_engine(connection_string)
 
+    create_table_query = """
+    CREATE TABLE IF NOT EXISTS athlete_profiles (
+        id BIGINT PRIMARY KEY,
+        username TEXT,
+        resource_state INTEGER,
+        firstname TEXT,
+        lastname TEXT,
+        bio TEXT,
+        city TEXT,
+        state TEXT,
+        country TEXT,
+        sex TEXT,
+        premium BOOLEAN,
+        summit BOOLEAN,
+        created_at TIMESTAMPTZ,
+        updated_at TIMESTAMPTZ,
+        badge_type_id INTEGER,
+        weight FLOAT,
+        profile_medium TEXT,
+        profile TEXT,
+        friend BOOLEAN,
+        follower BOOLEAN
+    );
+    """
+    with engine.begin() as conn:
+        conn.execute(text(create_table_query))
+
+    # Load athlete profiles into database
+    df_profiles.to_sql("athlete_profiles", engine, if_exists="replace", index=False)
+    logging.info("Athlete profiles loaded successfully into PostgreSQL database.")
+
+#---------------------------------------------------------------------
+#--------- Load activities into database-----------------------
+#---------------------------------------------------------------------
     create_table_query = """
     CREATE TABLE IF NOT EXISTS activities (
         id BIGINT PRIMARY KEY,
@@ -96,13 +173,13 @@ else:
         map_resource_state INTEGER
     );
     """
-
     with engine.begin() as conn:
         conn.execute(text(create_table_query))
 
-    #df.to_sql("activities", engine, if_exists="replace", index=False)
+    #overwrite
+    df.to_sql("activities", engine, if_exists="replace", index=False)
     #append
-    df.to_sql("activities", engine, if_exists="append", index=False)
+    #df.to_sql("activities", engine, if_exists="append", index=False)
     logging.info("Data loaded successfully into PostgreSQL database.")
 
     with engine.connect() as conn:
